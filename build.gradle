@@ -1,0 +1,33 @@
+group 'me.geso.esmapper'
+version '0.0.1-SNAPSHOT'
+
+apply plugin: 'java'
+
+subprojects {
+    apply plugin: 'java'
+
+    repositories {
+        mavenCentral()
+    }
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+project(":esmapper-core") {
+    apply plugin: 'java'
+
+    dependencies {
+        compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.4'
+        compile "org.elasticsearch:elasticsearch:2.3.3"
+        compileOnly "org.projectlombok:lombok:1.16.8"
+
+        testCompile 'org.apache.lucene:lucene-test-framework:5.5.0'
+        testCompile "org.elasticsearch:elasticsearch:2.3.3:tests"
+        testCompile group: 'junit', name: 'junit', version: '4.11'
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.12'
+}

@@ -1,0 +1,6 @@
+rootProject.name = 'esmapper-root'
+
+
+include ':esmapper-core'
+
+project(':esmapper-core').projectDir = "$rootDir/esmapper-core" as File
