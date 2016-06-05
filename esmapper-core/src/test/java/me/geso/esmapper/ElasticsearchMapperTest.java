@@ -105,6 +105,34 @@ public class ElasticsearchMapperTest {
     }
 
     @Test
+    public void unknownField() throws Exception {
+        for (int i = 0; i < 10; ++i) {
+            IndexResponse indexResponse = this.client.prepareIndex("blog", "entry")
+                    .setSource("title", "bbb " + i,
+                            "unknownField", "foooo")
+                    .get();
+            assertThat(indexResponse.isCreated(), is(true));
+        }
+
+        client.admin().indices().prepareRefresh()
+                .get();
+
+        ElasticsearchMapper elasticsearchMapper = new ElasticsearchMapper();
+        Stream<EntryBean> beanStream = elasticsearchMapper.findAll(
+                client.prepareSearch("blog")
+                        .setTypes("entry")
+                        .addSort("title", SortOrder.ASC),
+                3,
+                EntryBean.class
+        );
+        List<EntryBean> beans = beanStream.collect(Collectors.toList());
+        assertThat(beans.size(), is(10));
+        assertThat(beans.get(0).getTitle(), is("bbb 0"));
+        assertThat(beans.get(0).getId(), is(notNullValue()));
+        assertThat(beans.get(9).getTitle(), is("bbb 9"));
+    }
+
+    @Test
     public void findPagination() throws Exception {
         for (int i = 0; i < 5; ++i) {
             IndexResponse indexResponse = this.client.prepareIndex("blog", "entry")

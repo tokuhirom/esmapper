@@ -1,6 +1,7 @@
 package me.geso.esmapper;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.geso.esmapper.entity.IdSettable;
@@ -30,6 +31,7 @@ public class ElasticsearchMapper {
 
     public ElasticsearchMapper() {
         this.objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     public Future<Long> count(SearchRequestBuilder searchRequestBuilder) {
