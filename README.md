@@ -1,5 +1,7 @@
 # esmapper
 
+[![CircleCI](https://circleci.com/gh/tokuhirom/esmapper.svg?style=svg)](https://circleci.com/gh/tokuhirom/esmapper)
+
 ## SYNOPSIS
 
     Stream<EntryBean> beanStream = elasticsearchMapper.findAll(
