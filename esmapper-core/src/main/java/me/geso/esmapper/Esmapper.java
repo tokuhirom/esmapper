@@ -9,6 +9,8 @@ import me.geso.esmapper.mapper.Mapper;
 import me.geso.esmapper.pager.LoadMore;
 import me.geso.esmapper.pager.Page;
 import org.elasticsearch.action.ListenableActionFuture;
+import org.elasticsearch.action.index.IndexRequestBuilder;
+import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 
@@ -23,6 +25,11 @@ public class Esmapper {
 
     public Esmapper() {
         this.mapper = new Mapper();
+    }
+
+    public ListenableActionFuture<IndexResponse> index(IndexRequestBuilder indexRequestBuilder, Object bean) {
+        return indexRequestBuilder.setSource(mapper.writeValue(bean))
+                .execute();
     }
 
     public Future<Long> count(SearchRequestBuilder searchRequestBuilder) {

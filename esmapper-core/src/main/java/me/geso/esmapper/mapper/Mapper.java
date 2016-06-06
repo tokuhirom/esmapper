@@ -1,5 +1,6 @@
 package me.geso.esmapper.mapper;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,6 +42,14 @@ public class Mapper {
             throw new EsmapperJsonMappingException(e, hit, klass);
         } catch (IOException e) {
             // Should not reach here
+            throw new EsmapperRuntimeException(e);
+        }
+    }
+
+    public byte[] writeValue(Object bean) {
+        try {
+            return objectMapper.writeValueAsBytes(bean);
+        } catch (JsonProcessingException e) {
             throw new EsmapperRuntimeException(e);
         }
     }

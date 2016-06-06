@@ -3,6 +3,7 @@ package me.geso.esmapper;
 import com.google.common.io.Files;
 import me.geso.esmapper.pager.LoadMore;
 import me.geso.esmapper.pager.Page;
+import org.elasticsearch.action.ListenableActionFuture;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.settings.Settings;
@@ -56,6 +57,33 @@ public class EsmapperTest {
         if (node != null) {
             this.node.close();
         }
+    }
+
+    @Test
+    public void index() throws Exception {
+        Esmapper esmapper = new Esmapper();
+        EntryBean entryBean = new EntryBean();
+        entryBean.setTitle("hoge");
+        entryBean.setBody("foo");
+        ListenableActionFuture<IndexResponse> index = esmapper.index(
+                this.client.prepareIndex("blog", "entry")
+                        .setRefresh(true),
+                entryBean);
+        IndexResponse indexResponse = index.get();
+        assertThat(indexResponse.isCreated(), is(true));
+        String id = indexResponse.getId();
+
+        Future<Optional<EntryBean>> optionalFuture = esmapper.findFirst(
+                client.prepareSearch("blog")
+                        .setTypes("entry")
+                        .setQuery(QueryBuilders.termQuery("_id", id)),
+                EntryBean.class
+        );
+        Optional<EntryBean> entryBeanOptional = optionalFuture.get();
+        assertThat(entryBeanOptional.isPresent(), is(true));
+        assertThat(entryBeanOptional.get().getTitle(), is("hoge"));
+        assertThat(entryBeanOptional.get().getId(), is(id));
+        assertThat(entryBeanOptional.get().getScore(), is(1.0F));
     }
 
     @Test
