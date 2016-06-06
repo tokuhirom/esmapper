@@ -1,8 +1,8 @@
 package me.geso.esmapper.iterator;
 
-import me.geso.esmapper.Esmapper;
 import me.geso.esmapper.exception.EsmapperJsonMappingException;
 import me.geso.esmapper.exception.EsmapperRuntimeException;
+import me.geso.esmapper.mapper.Mapper;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
@@ -13,14 +13,14 @@ import java.util.NoSuchElementException;
 
 public class SearchIterator<T> implements Iterator<T> {
 
-    private final Esmapper mapper;
+    private final Mapper mapper;
     private final SearchRequestBuilder searchRequestBuilder;
     private final int scrollSize;
     private final Class<T> klass;
     private int page;
     private final LinkedList<T> buffer;
 
-    public SearchIterator(Esmapper mapper, SearchRequestBuilder searchRequestBuilder, int scrollSize, Class<T> klass) {
+    public SearchIterator(Mapper mapper, SearchRequestBuilder searchRequestBuilder, int scrollSize, Class<T> klass) {
         this.mapper = mapper;
         this.searchRequestBuilder = searchRequestBuilder;
         this.scrollSize = scrollSize;

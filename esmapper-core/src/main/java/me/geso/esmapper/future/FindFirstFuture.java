@@ -1,7 +1,7 @@
 package me.geso.esmapper.future;
 
-import me.geso.esmapper.Esmapper;
 import me.geso.esmapper.exception.EsmapperJsonMappingException;
+import me.geso.esmapper.mapper.Mapper;
 import org.elasticsearch.action.ListenableActionFuture;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
@@ -13,11 +13,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 public class FindFirstFuture<T> implements Future<Optional<T>> {
-    private final Esmapper mapper;
+    private final Mapper mapper;
     private final ListenableActionFuture<SearchResponse> actionFuture;
     private final Class<T> klass;
 
-    public FindFirstFuture(Esmapper mapper, ListenableActionFuture<SearchResponse> actionFuture, Class<T> klass) {
+    public FindFirstFuture(Mapper mapper, ListenableActionFuture<SearchResponse> actionFuture, Class<T> klass) {
         this.mapper = mapper;
         this.actionFuture = actionFuture;
         this.klass = klass;
