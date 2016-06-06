@@ -35,7 +35,8 @@ public class ElasticsearchMapper {
     }
 
     public Future<Long> count(SearchRequestBuilder searchRequestBuilder) {
-        ListenableActionFuture<SearchResponse> actionFuture = searchRequestBuilder.setSize(0)
+        ListenableActionFuture<SearchResponse> actionFuture = searchRequestBuilder
+                .setSize(0)
                 .execute();
         return new Future<Long>() {
             @Override

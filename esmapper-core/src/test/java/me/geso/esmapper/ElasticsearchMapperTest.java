@@ -72,7 +72,6 @@ public class ElasticsearchMapperTest {
         Future<Long> countFuture = elasticsearchMapper.count(
                 client.prepareSearch("blog")
                         .setTypes("entry")
-                        .setSize(0)
         );
         assertThat(countFuture.get(), is(1L));
     }
