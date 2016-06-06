@@ -26,10 +26,10 @@ import java.util.concurrent.Future;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class ElasticsearchMapper {
+public class Esmapper {
     private final ObjectMapper objectMapper;
 
-    public ElasticsearchMapper() {
+    public Esmapper() {
         this.objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }

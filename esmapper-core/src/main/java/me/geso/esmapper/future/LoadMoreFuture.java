@@ -1,6 +1,6 @@
 package me.geso.esmapper.future;
 
-import me.geso.esmapper.ElasticsearchMapper;
+import me.geso.esmapper.Esmapper;
 import me.geso.esmapper.exception.EsmapperJsonMappingException;
 import me.geso.esmapper.pager.LoadMore;
 import org.elasticsearch.action.ListenableActionFuture;
@@ -15,12 +15,12 @@ import java.util.concurrent.TimeoutException;
 
 public class LoadMoreFuture<T> implements Future<LoadMore<T>> {
 
-    private final ElasticsearchMapper mapper;
+    private final Esmapper mapper;
     private final ListenableActionFuture<SearchResponse> future;
     private final int entriesPerPage;
     private final Class<T> klass;
 
-    public LoadMoreFuture(ElasticsearchMapper mapper, ListenableActionFuture<SearchResponse> future, int entriesPerPage, Class<T> klass) {
+    public LoadMoreFuture(Esmapper mapper, ListenableActionFuture<SearchResponse> future, int entriesPerPage, Class<T> klass) {
         this.mapper = mapper;
         this.future = future;
         this.entriesPerPage = entriesPerPage;

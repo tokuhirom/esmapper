@@ -29,7 +29,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 // Note. I want to use ESIntegTest... But it causes jar hell. I can't resolve that.
 // As a result, I wrote test suite by myself.
-public class ElasticsearchMapperTest {
+public class EsmapperTest {
     private Client client;
     private Node node;
 
@@ -68,8 +68,8 @@ public class ElasticsearchMapperTest {
         client.admin().indices().prepareRefresh()
                 .get();
 
-        ElasticsearchMapper elasticsearchMapper = new ElasticsearchMapper();
-        Future<Long> countFuture = elasticsearchMapper.count(
+        Esmapper esmapper = new Esmapper();
+        Future<Long> countFuture = esmapper.count(
                 client.prepareSearch("blog")
                         .setTypes("entry")
         );
@@ -88,8 +88,8 @@ public class ElasticsearchMapperTest {
         client.admin().indices().prepareRefresh()
                 .get();
 
-        ElasticsearchMapper elasticsearchMapper = new ElasticsearchMapper();
-        Stream<EntryBean> beanStream = elasticsearchMapper.findAll(
+        Esmapper esmapper = new Esmapper();
+        Stream<EntryBean> beanStream = esmapper.findAll(
                 client.prepareSearch("blog")
                         .setTypes("entry")
                         .addSort("title", SortOrder.ASC),
@@ -116,8 +116,8 @@ public class ElasticsearchMapperTest {
         client.admin().indices().prepareRefresh()
                 .get();
 
-        ElasticsearchMapper elasticsearchMapper = new ElasticsearchMapper();
-        Stream<EntryBean> beanStream = elasticsearchMapper.findAll(
+        Esmapper esmapper = new Esmapper();
+        Stream<EntryBean> beanStream = esmapper.findAll(
                 client.prepareSearch("blog")
                         .setTypes("entry")
                         .addSort("title", SortOrder.ASC),
@@ -143,10 +143,10 @@ public class ElasticsearchMapperTest {
         client.admin().indices().prepareRefresh()
                 .get();
 
-        ElasticsearchMapper elasticsearchMapper = new ElasticsearchMapper();
+        Esmapper esmapper = new Esmapper();
         // page 1
         {
-            Page<EntryBean> page = elasticsearchMapper.findPagination(
+            Page<EntryBean> page = esmapper.findPagination(
                     1,
                     3,
                     client.prepareSearch("blog")
@@ -165,7 +165,7 @@ public class ElasticsearchMapperTest {
         }
         // page 2
         {
-            Page<EntryBean> page = elasticsearchMapper.findPagination(
+            Page<EntryBean> page = esmapper.findPagination(
                     2,
                     3,
                     client.prepareSearch("blog")
@@ -199,10 +199,10 @@ public class ElasticsearchMapperTest {
         client.admin().indices().prepareRefresh()
                 .get();
 
-        ElasticsearchMapper elasticsearchMapper = new ElasticsearchMapper();
+        Esmapper esmapper = new Esmapper();
         // page 1
         {
-            LoadMore<EntryBean> page = elasticsearchMapper.findLoadMore(
+            LoadMore<EntryBean> page = esmapper.findLoadMore(
                     3,
                     client.prepareSearch("blog")
                             .setTypes("entry")
@@ -219,7 +219,7 @@ public class ElasticsearchMapperTest {
         }
         // page 2
         {
-            LoadMore<EntryBean> page = elasticsearchMapper.findLoadMore(
+            LoadMore<EntryBean> page = esmapper.findLoadMore(
                     3,
                     client.prepareSearch("blog")
                             .setTypes("entry")
@@ -252,8 +252,8 @@ public class ElasticsearchMapperTest {
         client.admin().indices().prepareRefresh()
                 .get();
 
-        ElasticsearchMapper elasticsearchMapper = new ElasticsearchMapper();
-        Future<Optional<EntryBean>> optionalFuture = elasticsearchMapper.findFirst(
+        Esmapper esmapper = new Esmapper();
+        Future<Optional<EntryBean>> optionalFuture = esmapper.findFirst(
                 client.prepareSearch("blog")
                         .setTypes("entry")
                         .setQuery(QueryBuilders.termQuery("_id", indexResponses.get(4).getId())),
