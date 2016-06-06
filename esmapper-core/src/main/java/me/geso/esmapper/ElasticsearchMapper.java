@@ -95,8 +95,6 @@ public class ElasticsearchMapper {
                 }
 
                 page++;
-                if (searchResponse.getHits().getHits().length == 0) {
-                }
             }
 
             @Override
