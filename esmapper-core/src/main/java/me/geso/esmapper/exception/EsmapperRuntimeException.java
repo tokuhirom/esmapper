@@ -8,4 +8,8 @@ public class EsmapperRuntimeException extends RuntimeException {
     public EsmapperRuntimeException(Throwable cause) {
         super(cause);
     }
+
+    public EsmapperRuntimeException(String message) {
+        super(message);
+    }
 }

@@ -8,4 +8,8 @@ public class EsmapperException extends Exception {
     public EsmapperException(Throwable cause) {
         super(cause);
     }
+
+    public EsmapperException(String message) {
+        super(message);
+    }
 }
