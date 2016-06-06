@@ -12,7 +12,7 @@ public class EsmapperJsonMappingException extends EsmapperException {
         this.hit = hit;
         this.klass = klass;
     }
-    
+
     public SearchHit getHit() {
         return hit;
     }

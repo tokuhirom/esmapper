@@ -1,13 +1,15 @@
 package me.geso.esmapper;
 
-import me.geso.esmapper.entity.IdSettable;
-import me.geso.esmapper.entity.ScoreSettable;
+import me.geso.esmapper.annotation.Id;
+import me.geso.esmapper.annotation.Score;
 
-public class EntryBean implements ScoreSettable, IdSettable {
+public class EntryBean {
+    @Id
     private String id;
     private String title;
     private String body;
     private int i;
+    @Score
     private float score;
 
     public String getTitle() {
@@ -30,7 +32,6 @@ public class EntryBean implements ScoreSettable, IdSettable {
         return id;
     }
 
-    @Override
     public void setId(String id) {
         this.id = id;
     }
@@ -39,7 +40,6 @@ public class EntryBean implements ScoreSettable, IdSettable {
         return score;
     }
 
-    @Override
     public void setScore(float score) {
         this.score = score;
     }
