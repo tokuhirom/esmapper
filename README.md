@@ -17,6 +17,12 @@
 
 Tiny elasticsearch mapper for Java. Mapping search results to Java objects.
 
+## INSTALL
+
+You can install this library from maven central.
+
+See http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22me.geso.esmapper%22
+
 ## METHODS
 
 ### `Future<Long> count(SearchRequestBuilder searchRequestBuilder)`
