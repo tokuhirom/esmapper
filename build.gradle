@@ -2,7 +2,7 @@
 // build: ./gradlew build
 
 group 'me.geso.esmapper'
-def packageVersion = '0.0.1'
+def packageVersion = '0.1.0'
 
 //set build variables based on build type (release, continuous integration, development)
 def isDevBuild
@@ -26,6 +26,7 @@ subprojects {
     apply plugin: "maven"
     apply plugin: "signing"
 
+    group 'me.geso.esmapper'
     version packageVersion
 
     repositories {
