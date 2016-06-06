@@ -1,11 +1,12 @@
 package me.geso.esmapper;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.geso.esmapper.entity.IdSettable;
 import me.geso.esmapper.entity.ScoreSettable;
+import me.geso.esmapper.exception.EsmapperJsonMappingException;
+import me.geso.esmapper.exception.EsmapperRuntimeException;
 import me.geso.esmapper.pager.LoadMore;
 import me.geso.esmapper.pager.Page;
 import org.elasticsearch.action.ListenableActionFuture;
@@ -14,7 +15,6 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -66,7 +66,16 @@ public class ElasticsearchMapper {
         };
     }
 
-    public <T> Stream<T> findAll(SearchRequestBuilder searchRequestBuilder, int scrollSize, Class<T> klass) throws JsonParseException, JsonMappingException {
+    /**
+     * <p>Note. stream may throws EsmapperException.</p>
+     *
+     * @param searchRequestBuilder
+     * @param scrollSize
+     * @param klass
+     * @param <T>
+     * @return
+     */
+    public <T> Stream<T> findAll(SearchRequestBuilder searchRequestBuilder, int scrollSize, Class<T> klass) {
         Iterator<T> iterator = new Iterator<T>() {
 
             private int page = 0;
@@ -89,8 +98,8 @@ public class ElasticsearchMapper {
                 for (SearchHit hit : searchResponse.getHits()) {
                     try {
                         buffer.addLast(inflateHit(hit, klass));
-                    } catch (JsonParseException | JsonMappingException e) {
-                        throw new RuntimeException(e);
+                    } catch (EsmapperJsonMappingException e) {
+                        throw new EsmapperRuntimeException(e);
                     }
                 }
 
@@ -147,7 +156,7 @@ public class ElasticsearchMapper {
                 for (SearchHit hit : hits) {
                     try {
                         objects.add(inflateHit(hit, klass));
-                    } catch (JsonParseException | JsonMappingException e) {
+                    } catch (EsmapperJsonMappingException e) {
                         throw new ExecutionException(e);
                     }
                 }
@@ -202,7 +211,7 @@ public class ElasticsearchMapper {
 
                     try {
                         objects.add(inflateHit(hit, klass));
-                    } catch (JsonParseException | JsonMappingException e) {
+                    } catch (EsmapperJsonMappingException e) {
                         throw new ExecutionException(e);
                     }
                 }
@@ -211,7 +220,7 @@ public class ElasticsearchMapper {
         };
     }
 
-    private <T> T inflateHit(SearchHit hit, Class<? extends T> klass) throws JsonParseException, JsonMappingException {
+    private <T> T inflateHit(SearchHit hit, Class<? extends T> klass) throws EsmapperJsonMappingException {
         try {
             T bean = objectMapper.readValue(hit.source(), klass);
             if (bean instanceof IdSettable) {
@@ -221,10 +230,11 @@ public class ElasticsearchMapper {
                 ((ScoreSettable) bean).setScore(hit.score());
             }
             return bean;
-        } catch (JsonParseException | JsonMappingException e) {
-            throw e;
+        } catch (JsonMappingException e) {
+            throw new EsmapperJsonMappingException(e, hit, klass);
         } catch (IOException e) {
-            throw new UncheckedIOException(e);
+            // Should not reach here
+            throw new EsmapperRuntimeException(e);
         }
     }
 
@@ -263,7 +273,7 @@ public class ElasticsearchMapper {
                 if (hits.length > 0) {
                     try {
                         return Optional.of(inflateHit(hits[0], klass));
-                    } catch (JsonParseException | JsonMappingException e) {
+                    } catch (EsmapperJsonMappingException e) {
                         throw new ExecutionException(e);
                     }
                 } else {
